@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import Popup from "./Popup.jsx";
-import html2canvas from "html2canvas";
 
 let container;
 let root;
@@ -71,23 +70,9 @@ chrome.runtime.onMessage.addListener((msg) => {
     if (msg.action === "close_popup") closePopup();
 });
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    if (msg.action === "capture_tab") {
-        const topHeight = 2000;
+function onUrlChange() {
+    chrome.runtime.sendMessage({ action: "capture" });
+    console.log("URL changed:", location.href);
+}
 
-        html2canvas(document.body, {
-            x: 0,
-            y: 0,
-            width: document.documentElement.scrollWidth,
-            height: topHeight,
-            scrollX: 0,
-            scrollY: 0,
-        })
-            .then((canvas) => {
-                sendResponse({ preview: canvas.toDataURL("image/jpeg", 0.7) });
-            })
-            .catch(() => sendResponse({ preview: null }));
-
-        return true;
-    }
-});
+onUrlChange();

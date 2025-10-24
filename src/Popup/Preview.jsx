@@ -11,7 +11,10 @@ export default function Preview({ tab }) {
 
         chrome.runtime.sendMessage(
             { action: "get_preview", tabId: tab.id },
-            (res) => setImage(res?.preview || null)
+            (res) => {
+                setImage(res?.preview || null);
+                console.log("Preview loaded:", res);
+            }
         );
     }, [tab]);
 

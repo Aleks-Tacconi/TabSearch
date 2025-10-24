@@ -1,16 +1,8 @@
-let lastActiveTabId = null;
-
-chrome.tabs.onActivated.addListener(({ tabId }) => {
-    if (lastActiveTabId !== null && lastActiveTabId !== tabId) {
-        captureTabPreview(lastActiveTabId);
-    }
-    lastActiveTabId = tabId;
-});
-
 chrome.commands.onCommand.addListener((command) => {
     if (command === "show_popup") {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, { action: "toggle_popup" });
+            captureTabPreview(tabs[0].id)
         });
     }
 });
@@ -34,27 +26,36 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.action === "activate_tab" && msg.tabId) {
-        if (lastActiveTabId !== null && lastActiveTabId !== msg.tabId) {
-            captureTabPreview(lastActiveTabId); // capture previous tab
-        }
-        chrome.tabs.update(msg.tabId, { active: true }, () => {
-            lastActiveTabId = msg.tabId;
-        });
+        chrome.tabs.update(msg.tabId, { active: true });
     }
 });
 
-const tabPreviews = {};
+let tabPreviews = {};
 
 function captureTabPreview(tabId) {
-    chrome.scripting.executeScript({ target: { tabId }, files: ["content.js"] }, () => {
-        chrome.tabs.sendMessage(tabId, { action: "capture_tab" }, (res) => {
-            if (res?.preview) tabPreviews[tabId] = res.preview;
-        });
+    chrome.tabs.get(tabId, (tab) => {
+        if (!tab) return;
+
+        if (tab.active) {
+            chrome.tabs.captureVisibleTab(tab.windowId, { format: "jpeg", quality: 50 }, (dataUrl) => {
+                if (!chrome.runtime.lastError && dataUrl) {
+                    tabPreviews[tabId] = dataUrl;
+                }
+            });
+        }
     });
 }
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.action === "get_preview") {
         sendResponse({ preview: tabPreviews[msg.tabId] || null });
+    }
+});
+
+chrome.commands.onCommand.addListener((command) => {
+    if (command === "capture") {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            captureTabPreview(tabs[0].id)
+        });
     }
 });
