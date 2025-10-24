@@ -33,9 +33,12 @@ const styles = {
     },
 };
 
-export default function Tab({ tab }) {
+export default function Tab({ tab, selected }) {
     return (
-        <li style={styles.li}>
+        <li style={{
+            ...styles.li,
+            backgroundColor: selected ? "#ddd" : "transparent",
+        }}>
             {tab.favIconUrl ? (
                 <img src={tab.favIconUrl} alt="icon" style={styles.icon} />
             ) : (

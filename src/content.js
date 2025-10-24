@@ -15,9 +15,10 @@ function togglePopup() {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "300px",
-            height: "150px",
             zIndex: 999999,
+            width: "80vw",
+            height: "80vh",
+            overflow: "hidden",
         });
         document.body.appendChild(container);
 

@@ -7,10 +7,16 @@ chrome.commands.onCommand.addListener((command) => {
 });
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  if (msg.action === "get_tabs") {
-    chrome.tabs.query({}, (tabs) => {
-      sendResponse(tabs);
-    });
-    return true;
-  }
+    if (msg.action === "get_tabs") {
+        chrome.tabs.query({}, (tabs) => {
+            sendResponse(tabs);
+        });
+        return true;
+    }
+});
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    if (msg.action === "activate_tab" && msg.tabId) {
+        chrome.tabs.update(msg.tabId, { active: true });
+    }
 });

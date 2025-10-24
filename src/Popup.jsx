@@ -1,20 +1,25 @@
 import { useState, useEffect } from "react";
 import TabList from "./Popup/TabList.jsx"
 
-const popupStyle = {
-    background: "white",
-    border: "1px solid black",
-    borderRadius: "8px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-    padding: "20px 30px",
-    textAlign: "center",
-    fontFamily: "sans-serif",
-    cursor: "pointer"
+const styles = {
+    popupStyle: {
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        background: "white",
+        border: "1px solid black",
+        borderRadius: "8px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+        fontFamily: "sans-serif",
+        width: "80vw",
+        height: "80vh",
+        overflow: "hidden",
+    }
 };
 
 
 export default function Popup() {
-    const [visible, setVisible] = useState(true);
     const [tabs, setTabs] = useState([]);
 
     useEffect(() => {
@@ -23,13 +28,9 @@ export default function Popup() {
         });
     }, []);
 
-    if (!visible) return null;
-
     return (
-        <div style={popupStyle} onClick={() => setVisible(false)}>
-            <h3>Open Tabs</h3>
+        <div style={styles.popupStyle}>
             <TabList tabs={tabs}></TabList>
-            <p>Click anywhere to close</p>
         </div>
     );
 }
