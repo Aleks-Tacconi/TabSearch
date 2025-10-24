@@ -11,6 +11,7 @@ function togglePopup() {
         container = document.createElement("iframe");
         container.id = "react-popup-iframe";
         Object.assign(container.style, {
+            backgroundColor: "transparent",
             position: "fixed",
             top: "50%",
             left: "50%",
