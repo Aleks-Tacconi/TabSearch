@@ -1,8 +1,12 @@
 chrome.commands.onCommand.addListener((command) => {
     if (command === "show_popup") {
+        chrome.storage.local.get("tabPreviews", (data) => {
+            tabPreviews = data.tabPreviews || {};
+        });
+
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, { action: "toggle_popup" });
-            captureTabPreview(tabs[0].id)
+            captureTabPreview(tabs[0].id);
         });
     }
 });
@@ -32,6 +36,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
 let tabPreviews = {};
 
+function savePreviews() {
+    chrome.storage.local.set({ tabPreviews });
+}
+
 function captureTabPreview(tabId) {
     chrome.tabs.get(tabId, (tab) => {
         if (!tab) return;
@@ -40,6 +48,7 @@ function captureTabPreview(tabId) {
             chrome.tabs.captureVisibleTab(tab.windowId, { format: "jpeg", quality: 50 }, (dataUrl) => {
                 if (!chrome.runtime.lastError && dataUrl) {
                     tabPreviews[tabId] = dataUrl;
+                    savePreviews();
                 }
             });
         }
@@ -55,7 +64,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 chrome.commands.onCommand.addListener((command) => {
     if (command === "capture") {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            captureTabPreview(tabs[0].id)
+            captureTabPreview(tabs[0].id);
         });
     }
 });
