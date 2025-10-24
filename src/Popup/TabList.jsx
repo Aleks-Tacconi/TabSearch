@@ -20,6 +20,7 @@ export default function TabList({ tabs, setHoveredTab }) {
 
     useEffect(() => {
         const ref = itemRefs.current[selectedIndex];
+        setHoveredTab(filteredTabs[selectedIndex]);
         ref?.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }, [selectedIndex, filteredTabs]);
 

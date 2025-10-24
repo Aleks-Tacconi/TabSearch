@@ -10,7 +10,7 @@
         "service_worker": "background.js"
     },
 
-    "permissions": ["scripting", "activeTab", "tabs", "storage"],
+    "permissions": ["scripting", "activeTab", "tabs", "storage", "allow-scripts"],
     "host_permissions": ["<all_urls>"],
     "content_scripts": [
         {
