@@ -49,6 +49,8 @@ const styles = {
 
 
 const Tab = forwardRef(({ tab, selected }, ref) => {
+    if (tab.active) return null;
+
     return (
         <li
             ref={ref}

@@ -11,10 +11,11 @@ export default function TabList({ tabs, setHoveredTab }) {
     const [query, setQuery] = useState("");
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const filteredTabs = tabs.filter((tab) =>
-        tab.title?.toLowerCase().includes(query.toLowerCase())
-    );
-
+    const filteredTabs = tabs
+        .filter((tab) => !tab.active)
+        .filter((tab) =>
+            tab.title?.toLowerCase().includes(query.toLowerCase())
+        );
     const itemRefs = useRef([]);
 
     useEffect(() => {

@@ -1,3 +1,12 @@
+let lastActiveTabId = null;
+
+chrome.tabs.onActivated.addListener(({ tabId }) => {
+    if (lastActiveTabId !== null && lastActiveTabId !== tabId) {
+        captureTabPreview(lastActiveTabId);
+    }
+    lastActiveTabId = tabId;
+});
+
 chrome.commands.onCommand.addListener((command) => {
     if (command === "show_popup") {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -25,21 +34,16 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.action === "activate_tab" && msg.tabId) {
-        chrome.tabs.update(msg.tabId, { active: true });
+        if (lastActiveTabId !== null && lastActiveTabId !== msg.tabId) {
+            captureTabPreview(lastActiveTabId); // capture previous tab
+        }
+        chrome.tabs.update(msg.tabId, { active: true }, () => {
+            lastActiveTabId = msg.tabId;
+        });
     }
 });
 
 const tabPreviews = {};
-
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === "complete") {
-        captureTabPreview(tabId);
-    }
-});
-
-chrome.tabs.onActivated.addListener(({ tabId }) => {
-    captureTabPreview(tabId);
-});
 
 function captureTabPreview(tabId) {
     chrome.scripting.executeScript({ target: { tabId }, files: ["content.js"] }, () => {

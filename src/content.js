@@ -73,7 +73,7 @@ chrome.runtime.onMessage.addListener((msg) => {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.action === "capture_tab") {
-        const topHeight = 300;
+        const topHeight = 2000;
 
         html2canvas(document.body, {
             x: 0,
