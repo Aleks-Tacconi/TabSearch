@@ -11,7 +11,7 @@ function togglePopup() {
         container = document.createElement("iframe");
         container.id = "react-popup-iframe";
         Object.assign(container.style, {
-            backgroundColor: "transparent",
+            background: "transparent",
             position: "fixed",
             top: "50%",
             left: "50%",
@@ -31,7 +31,8 @@ function togglePopup() {
         // Add CSS to hide scrollbar
         const style = doc.createElement("style");
         style.textContent = `
-        html, body {
+        html, body, #root {
+            background: transparent;
             margin: 0;
             padding: 0;
             width: 100%;
