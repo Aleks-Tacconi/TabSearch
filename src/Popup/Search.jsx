@@ -30,10 +30,18 @@ export default function Search({ query, setQuery, selectedIndex, setSelectedInde
                     const selectedTab = filteredTabs[selectedIndex];
                     if (selectedTab) {
                         chrome.runtime.sendMessage({
+                            action: "close_popup_background",
+                        });
+
+                        chrome.runtime.sendMessage({
                             action: "activate_tab",
                             tabId: selectedTab.id,
                         });
                     }
+                } else if (e.key === "Escape") {
+                    chrome.runtime.sendMessage({
+                        action: "close_popup_background",
+                    });
                 }
             }}
 

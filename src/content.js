@@ -30,16 +30,24 @@ function togglePopup() {
     }
 
     if (visible) {
-        root.unmount();
-        container.remove();
-        container = null;
+        closePopup();
     } else {
         root.render(React.createElement(Popup));
+        visible = true;
     }
+}
 
-    visible = !visible;
+function closePopup() {
+    root.unmount();
+    container.remove();
+    container = null;
+    visible = false;
 }
 
 chrome.runtime.onMessage.addListener((msg) => {
     if (msg.action === "toggle_popup") togglePopup();
+});
+
+chrome.runtime.onMessage.addListener((msg) => {
+    if (msg.action === "close_popup") closePopup();
 });

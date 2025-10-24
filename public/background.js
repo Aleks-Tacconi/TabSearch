@@ -16,6 +16,14 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 });
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    if (msg.action === "close_popup_background") {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { action: "close_popup" });
+        });
+    }
+});
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.action === "activate_tab" && msg.tabId) {
         chrome.tabs.update(msg.tabId, { active: true });
     }
