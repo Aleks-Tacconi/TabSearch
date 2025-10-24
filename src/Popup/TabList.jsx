@@ -3,21 +3,11 @@ import Tab from "./Tab";
 import Search from "./Search";
 
 const styles = {
-    container: {
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-    },
-    list: {
-        listStyle: "none",
-        padding: 0,
-        margin: 0,
-        overflowY: "auto",
-        flex: 1,
-    },
+    container: { display: "flex", flexDirection: "column", flex: 1, height: "100%" },
+    list: { listStyle: "none", padding: 0, margin: 0, overflowY: "auto", flex: 1 },
 };
 
-export default function TabList({ tabs }) {
+export default function TabList({ tabs, setHoveredTab }) {
     const [query, setQuery] = useState("");
     const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -29,7 +19,7 @@ export default function TabList({ tabs }) {
 
     useEffect(() => {
         const ref = itemRefs.current[selectedIndex];
-        ref?.scrollIntoView({ block: "nearest" });
+        ref?.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }, [selectedIndex, filteredTabs]);
 
     return (
@@ -40,6 +30,7 @@ export default function TabList({ tabs }) {
                 selectedIndex={selectedIndex}
                 setSelectedIndex={setSelectedIndex}
                 filteredTabs={filteredTabs}
+                setHoveredTab={setHoveredTab}
             />
 
             <ul style={styles.list}>

@@ -21,6 +21,10 @@
         {
             "resources": ["search.png"],
             "matches": ["<all_urls>"]
+        },
+        {
+            "resources": ["html2canvas.min.js"],
+            "matches": ["<all_urls>"]
         }
     ],
     "commands": {

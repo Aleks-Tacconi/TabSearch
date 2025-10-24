@@ -19,13 +19,17 @@ const styles = {
     },
 };
 
-export default function Search({ query, setQuery, selectedIndex, setSelectedIndex, filteredTabs }) {
+export default function Search({ query, setQuery, selectedIndex, setSelectedIndex, filteredTabs, setHoveredTab }) {
     const inputRef = useRef();
     const [focused, setFocused] = useState(false);
 
     useEffect(() => {
         inputRef.current?.focus();
     }, []);
+
+    useEffect(() => {
+        setHoveredTab(filteredTabs[selectedIndex]);
+    }, [selectedIndex]);
 
     return (
         <input

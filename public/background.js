@@ -28,3 +28,29 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         chrome.tabs.update(msg.tabId, { active: true });
     }
 });
+
+const tabPreviews = {};
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status === "complete") {
+        captureTabPreview(tabId);
+    }
+});
+
+chrome.tabs.onActivated.addListener(({ tabId }) => {
+    captureTabPreview(tabId);
+});
+
+function captureTabPreview(tabId) {
+    chrome.scripting.executeScript({ target: { tabId }, files: ["content.js"] }, () => {
+        chrome.tabs.sendMessage(tabId, { action: "capture_tab" }, (res) => {
+            if (res?.preview) tabPreviews[tabId] = res.preview;
+        });
+    });
+}
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    if (msg.action === "get_preview") {
+        sendResponse({ preview: tabPreviews[msg.tabId] || null });
+    }
+});
