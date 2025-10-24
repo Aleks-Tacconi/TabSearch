@@ -18,15 +18,33 @@ function togglePopup() {
             zIndex: 999999,
             width: "80vw",
             height: "80vh",
-            overflow: "hidden",
+            border: "none",
         });
         document.body.appendChild(container);
 
-        container.contentDocument.open();
-        container.contentDocument.write("<div id='root'></div>");
-        container.contentDocument.close();
+        const doc = container.contentDocument;
+        doc.open();
+        doc.write("<div id='root'></div>");
+        doc.close();
 
-        root = ReactDOM.createRoot(container.contentDocument.getElementById("root"));
+        // Add CSS to hide scrollbar
+        const style = doc.createElement("style");
+        style.textContent = `
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        `;
+        doc.head.appendChild(style);
+
+        root = ReactDOM.createRoot(doc.getElementById("root"));
     }
 
     if (visible) {

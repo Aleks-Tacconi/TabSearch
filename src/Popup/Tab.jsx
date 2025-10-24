@@ -1,3 +1,5 @@
+import React, { forwardRef } from "react";
+
 const styles = {
     li: {
         display: "flex",
@@ -20,7 +22,7 @@ const styles = {
         height: "32px",
         marginRight: "12px",
         flexShrink: 0,
-        borderradius: "8px",
+        borderRadius: "8px",
         objectFit: "contain",
     },
     textContainer: {
@@ -45,12 +47,17 @@ const styles = {
     },
 };
 
-export default function Tab({ tab, selected }) {
+
+const Tab = forwardRef(({ tab, selected }, ref) => {
     return (
-        <li style={{ ...styles.li, ...(selected ? styles.selected : {}) }}>
+        <li
+            ref={ref}
+            style={{ ...styles.li, ...(selected ? styles.selected : {}) }}
+        >
             <img
                 src={tab.favIconUrl || chrome.runtime.getURL("search.png")}
-                alt="icon" style={styles.icon}
+                alt="icon"
+                style={styles.icon}
                 onError={(e) => {
                     e.onerror = null;
                     e.target.src = chrome.runtime.getURL("search.png");
@@ -63,4 +70,7 @@ export default function Tab({ tab, selected }) {
             </div>
         </li>
     );
-}
+});
+
+export default Tab;
+

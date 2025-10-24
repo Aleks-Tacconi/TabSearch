@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import TabList from "./Popup/TabList.jsx"
+import Preview from "./Popup/Preview.jsx"
 
 const styles = {
     popupStyle: {
@@ -8,15 +9,16 @@ const styles = {
         left: "50%",
         transform: "translate(-50%, -50%)",
         background: "white",
-        borderradius: "8px",
+        borderRadius: "8px",
         boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
         fontFamily: "sans-serif",
-        width: "40vw",
+        width: "80vw",
         height: "80vh",
+        display: "flex",
+        flexDirection: "column",
         overflow: "hidden",
-    }
+    },
 };
-
 
 export default function Popup() {
     const [tabs, setTabs] = useState([]);
@@ -29,7 +31,8 @@ export default function Popup() {
 
     return (
         <div style={styles.popupStyle}>
-            <TabList tabs={tabs}></TabList>
+            <TabList tabs={tabs} />
+            <Preview />
         </div>
     );
 }

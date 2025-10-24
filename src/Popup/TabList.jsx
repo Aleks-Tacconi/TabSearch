@@ -1,6 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Tab from "./Tab";
-import Search from "./Search"
+import Search from "./Search";
+
+const styles = {
+    container: {
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+    },
+    list: {
+        listStyle: "none",
+        padding: 0,
+        margin: 0,
+        overflowY: "auto",
+        flex: 1,
+    },
+};
 
 export default function TabList({ tabs }) {
     const [query, setQuery] = useState("");
@@ -10,16 +25,30 @@ export default function TabList({ tabs }) {
         tab.title?.toLowerCase().includes(query.toLowerCase())
     );
 
-    return (
-        <div>
-            <Search query={query} setQuery={setQuery} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} filteredTabs={filteredTabs} />
+    const itemRefs = useRef([]);
 
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+    useEffect(() => {
+        const ref = itemRefs.current[selectedIndex];
+        ref?.scrollIntoView({ block: "nearest" });
+    }, [selectedIndex, filteredTabs]);
+
+    return (
+        <div style={styles.container}>
+            <Search
+                query={query}
+                setQuery={setQuery}
+                selectedIndex={selectedIndex}
+                setSelectedIndex={setSelectedIndex}
+                filteredTabs={filteredTabs}
+            />
+
+            <ul style={styles.list}>
                 {filteredTabs.map((tab, i) => (
                     <Tab
                         key={tab.id}
                         tab={tab}
                         selected={i === selectedIndex}
+                        ref={(el) => (itemRefs.current[i] = el)}
                     />
                 ))}
             </ul>
