@@ -8,17 +8,24 @@ let visible = false;
 
 function togglePopup() {
     if (!container) {
-        container = document.createElement("div");
-        container.id = "react-popup-container";
+        container = document.createElement("iframe");
+        container.id = "react-popup-iframe";
         Object.assign(container.style, {
             position: "fixed",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            zIndex: 9999,
+            width: "300px",
+            height: "150px",
+            zIndex: 999999,
         });
         document.body.appendChild(container);
-        root = ReactDOM.createRoot(container);
+
+        container.contentDocument.open();
+        container.contentDocument.write("<div id='root'></div>");
+        container.contentDocument.close();
+
+        root = ReactDOM.createRoot(container.contentDocument.getElementById("root"));
     }
 
     if (visible) {
