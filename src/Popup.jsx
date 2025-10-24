@@ -8,11 +8,10 @@ const styles = {
         left: "50%",
         transform: "translate(-50%, -50%)",
         background: "white",
-        border: "1px solid black",
-        borderRadius: "8px",
+        borderradius: "8px",
         boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
         fontFamily: "sans-serif",
-        width: "80vw",
+        width: "40vw",
         height: "80vh",
         overflow: "hidden",
     }

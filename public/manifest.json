@@ -17,6 +17,12 @@
             "js": ["content.js"]
         }
     ],
+    "web_accessible_resources": [
+        {
+            "resources": ["search.png"],
+            "matches": ["<all_urls>"]
+        }
+    ],
     "commands": {
         "show_popup": {
             "suggested_key": { "default": "Ctrl+Shift+Y" },

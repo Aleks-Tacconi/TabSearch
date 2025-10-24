@@ -1,7 +1,27 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const styles = {
+    searchBar: {
+        width: "100%",
+        padding: "8px 12px",
+        marginBottom: "8px",
+        boxSizing: "border-box",
+        borderRadius: "8px",
+        border: "1px solid #ccc",
+        boxShadow: "inset 0 1px 3px rgba(0,0,0,0.1)",
+        fontSize: "0.95rem",
+        outline: "none",
+        transition: "border 0.2s, box-shadow 0.2s",
+    },
+    searchBarFocus: {
+        border: "1px solid #2a7ae2",
+        boxShadow: "0 0 4px rgba(42,122,226,0.3)",
+    },
+};
 
 export default function Search({ query, setQuery, selectedIndex, setSelectedIndex, filteredTabs }) {
     const inputRef = useRef();
+    const [focused, setFocused] = useState(false);
 
     useEffect(() => {
         inputRef.current?.focus();
@@ -17,8 +37,8 @@ export default function Search({ query, setQuery, selectedIndex, setSelectedInde
                 setQuery(e.target.value);
                 setSelectedIndex(0);
             }}
-
-
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
             onKeyDown={(e) => {
                 if (e.key === "ArrowDown") {
                     setSelectedIndex((i) => Math.min(i + 1, filteredTabs.length - 1));
@@ -29,29 +49,18 @@ export default function Search({ query, setQuery, selectedIndex, setSelectedInde
                 } else if (e.key === "Enter") {
                     const selectedTab = filteredTabs[selectedIndex];
                     if (selectedTab) {
-                        chrome.runtime.sendMessage({
-                            action: "close_popup_background",
-                        });
-
-                        chrome.runtime.sendMessage({
-                            action: "activate_tab",
-                            tabId: selectedTab.id,
-                        });
+                        chrome.runtime.sendMessage({ action: "close_popup_background" });
+                        chrome.runtime.sendMessage({ action: "activate_tab", tabId: selectedTab.id });
                     }
                 } else if (e.key === "Escape") {
-                    chrome.runtime.sendMessage({
-                        action: "close_popup_background",
-                    });
+                    chrome.runtime.sendMessage({ action: "close_popup_background" });
                 }
             }}
-
             style={{
-                width: "100%",
-                padding: "6px 10px",
-                marginBottom: "8px",
-                boxSizing: "border-box",
+                ...styles.searchBar,
+                ...(focused ? styles.searchBarFocus : {})
             }}
         />
     );
-
 }
+
