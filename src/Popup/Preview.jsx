@@ -7,7 +7,7 @@ export default function Preview({ tab }) {
         if (!tab || !tab.id) {
             setImage(null);
             return;
-        }
+        };
 
         chrome.runtime.sendMessage(
             { action: "get_preview", tabId: tab.id },
@@ -26,12 +26,13 @@ export default function Preview({ tab }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        width: "40vw",
     };
 
     return (
         <div style={previewStyle}>
             {image ? (
-                <img src={image} alt={tab.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                <img src={image} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             ) : (
                 <span>No preview available</span>
             )}

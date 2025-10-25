@@ -19,9 +19,13 @@ export default function TabList({ tabs, setHoveredTab }) {
     const itemRefs = useRef([]);
 
     useEffect(() => {
-        const ref = itemRefs.current[selectedIndex];
-        setHoveredTab(filteredTabs[selectedIndex]);
-        ref?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        if (filteredTabs.length === 0) {
+            setHoveredTab(null);
+        } else {
+            const ref = itemRefs.current[selectedIndex];
+            setHoveredTab(filteredTabs[selectedIndex]);
+            ref?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        };
     }, [selectedIndex, filteredTabs]);
 
     return (

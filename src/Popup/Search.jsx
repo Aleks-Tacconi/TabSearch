@@ -2,9 +2,12 @@ import { useEffect, useRef, useState } from "react";
 
 const styles = {
     searchBar: {
-        width: "100%",
+        width: "calc(100% - 12px)",
         padding: "8px 12px",
         marginBottom: "8px",
+        marginTop: "6px",
+        marginLeft: "6px",
+        marginRight: "6px",
         boxSizing: "border-box",
         borderRadius: "8px",
         border: "1px solid #ccc",
@@ -44,6 +47,17 @@ export default function Search({ query, setQuery, selectedIndex, setSelectedInde
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             onKeyDown={(e) => {
+
+                if (e.key === "Escape") {
+                    chrome.runtime.sendMessage({ action: "close_popup_background" });
+                    return
+                }
+
+                if (filteredTabs.length === 0) {
+                    setSelectedIndex(0);
+                    return
+                };
+
                 if (e.key === "ArrowDown") {
                     setSelectedIndex((i) => Math.min(i + 1, filteredTabs.length - 1));
                     e.preventDefault();
@@ -56,8 +70,6 @@ export default function Search({ query, setQuery, selectedIndex, setSelectedInde
                         chrome.runtime.sendMessage({ action: "close_popup_background" });
                         chrome.runtime.sendMessage({ action: "activate_tab", tabId: selectedTab.id });
                     }
-                } else if (e.key === "Escape") {
-                    chrome.runtime.sendMessage({ action: "close_popup_background" });
                 }
             }}
             style={{
