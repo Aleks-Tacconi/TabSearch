@@ -1,5 +1,31 @@
 import { useState, useEffect } from "react";
 
+const styles = {
+    preview: {
+        width: "60vw",
+        height: "50vh",
+        borderRadius: "8px",
+        overflow: "hidden",
+        background: "#f7f7f7",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+        margin: "8px",
+    },
+    img: {
+        maxWidth: "100%",
+        maxHeight: "100%",
+        objectFit: "contain",
+        borderRadius: "4px",
+    },
+    placeholder: {
+        color: "#666",
+        fontSize: "0.9rem",
+        fontStyle: "italic",
+    },
+};
+
 export default function Preview({ tab }) {
     const [image, setImage] = useState(null);
 
@@ -18,23 +44,12 @@ export default function Preview({ tab }) {
         );
     }, [tab]);
 
-    const previewStyle = {
-        flex: 1,
-        borderRadius: '4px',
-        overflow: 'hidden',
-        background: '#f0f0f0',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: "40vw",
-    };
-
     return (
-        <div style={previewStyle}>
+        <div style={styles.preview}>
             {image ? (
-                <img src={image} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                <img src={image} style={styles.img} />
             ) : (
-                <span>No preview available</span>
+                <span style={styles.placeholder}>No preview available</span>
             )}
         </div>
     );

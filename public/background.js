@@ -57,6 +57,11 @@ function captureTabPreview(tabId) {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.action === "get_preview") {
+        // TODO: this can be optimized (maybe)
+        chrome.storage.local.get("tabPreviews", (data) => {
+            tabPreviews = data.tabPreviews || {};
+        });
+
         sendResponse({ preview: tabPreviews[msg.tabId] || null });
     }
 });
