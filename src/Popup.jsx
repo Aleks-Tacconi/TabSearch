@@ -16,7 +16,7 @@ const styles = {
         justifyContent: "flex-start",
 
         /* --- Frosted glass effect --- */
-        background: "rgba(20, 20, 20, 0.97)",
+        background: "rgba(20, 20, 20, 0.92)",
         backdropFilter: "blur(12px) saturate(120%)",
         WebkitBackdropFilter: "blur(12px) saturate(120%)",
 
