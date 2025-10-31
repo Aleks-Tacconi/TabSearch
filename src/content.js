@@ -11,7 +11,6 @@ function togglePopup() {
         container = document.createElement("iframe");
         container.id = "react-popup-iframe";
         Object.assign(container.style, {
-            background: "transparent",
             position: "fixed",
             top: "50%",
             left: "50%",
@@ -21,32 +20,50 @@ function togglePopup() {
             height: "80vh",
             border: "none",
         });
+        container.style.setProperty("background", "transparent", "important");
         document.body.appendChild(container);
 
         const doc = container.contentDocument;
         doc.open();
-        doc.write("<div id='root'></div>");
+
+        doc.write(`
+        <!DOCTYPE html>
+        <html>
+        <head></head>
+        <body>
+          <div id="tab-search-root"></div>
+        </body>
+        </html>
+        `);
+
         doc.close();
 
         // Add CSS to hide scrollbar
         const style = doc.createElement("style");
         style.textContent = `
-        html, body, #root {
-            background: transparent;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+        html, body, #tab-search-root {
+          all: initial;
+          display: block;
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0) !important;
+          color: rgba(0, 0, 0, 0) !important;
+          overflow: hidden;
         }
 
-        ::-webkit-scrollbar {
-            display: none;
+        *, *::before, *::after {
+          all: unset;
+          box-sizing: border-box;
         }
+
+        ::-webkit-scrollbar { display: none; }
         `;
         doc.head.appendChild(style);
 
-        root = ReactDOM.createRoot(doc.getElementById("root"));
+        root = ReactDOM.createRoot(doc.getElementById("tab-search-root"));
     }
 
     if (visible) {
@@ -71,10 +88,3 @@ chrome.runtime.onMessage.addListener((msg) => {
 chrome.runtime.onMessage.addListener((msg) => {
     if (msg.action === "close_popup") closePopup();
 });
-
-function onUrlChange() {
-    chrome.runtime.sendMessage({ action: "capture" });
-    console.log("URL changed:", location.href);
-}
-
-onUrlChange();

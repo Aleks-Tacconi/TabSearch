@@ -7,7 +7,7 @@ const styles = {
     list: { listStyle: "none", padding: 0, margin: 0, overflowY: "auto", flex: 1 },
 };
 
-export default function TabList({ tabs, setHoveredTab }) {
+export default function TabList({ tabs }) {
     const [query, setQuery] = useState("");
     const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -19,13 +19,8 @@ export default function TabList({ tabs, setHoveredTab }) {
     const itemRefs = useRef([]);
 
     useEffect(() => {
-        if (filteredTabs.length === 0) {
-            setHoveredTab(null);
-        } else {
-            const ref = itemRefs.current[selectedIndex];
-            setHoveredTab(filteredTabs[selectedIndex]);
-            ref?.scrollIntoView({ block: "nearest", behavior: "smooth" });
-        };
+        const ref = itemRefs.current[selectedIndex];
+        ref?.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }, [selectedIndex, filteredTabs]);
 
     return (
@@ -36,7 +31,6 @@ export default function TabList({ tabs, setHoveredTab }) {
                 selectedIndex={selectedIndex}
                 setSelectedIndex={setSelectedIndex}
                 filteredTabs={filteredTabs}
-                setHoveredTab={setHoveredTab}
             />
 
             <ul style={styles.list}>

@@ -4,18 +4,19 @@ const styles = {
     li: {
         display: "flex",
         alignItems: "center",
-        padding: "8px 12px",
+        padding: "8px 20px",
         cursor: "pointer",
         borderRadius: "6px",
         marginBottom: "4px",
         transition: "background 0.2s, box-shadow 0.2s",
         boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
         margin: "4px 8px",
-        width: "40vw",
     },
     selected: {
-        backgroundColor: "#e6f0ff",
-        boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+        background: "rgba(255,255,255,0.18)",
+        backdropFilter: "blur(10px)",
+        border: "1px solid rgba(255,255,255,0.25)",
+        boxShadow: "0 3px 8px rgba(0,0,0,0.3)",
     },
     icon: {
         backgroundColor: "transparent",

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import TabList from "./Popup/TabList.jsx";
-import Preview from "./Popup/Preview.jsx";
 
 const styles = {
     popupStyle: {
@@ -8,21 +7,25 @@ const styles = {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        background: "white",
-        borderRadius: "8px",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-        fontFamily: "sans-serif",
         width: "80vw",
         height: "80vh",
         display: "flex",
         flexDirection: "row",
+
+        background: "rgba(255, 255, 255, 0.12)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        WebkitBackdropFilter: "blur(20px) saturate(180%)",
+
+        border: "1px solid rgba(255,255,255,0.2)",
+        borderRadius: "12px",
+        boxShadow: "0 8px 30px rgba(0,0,0,0.25)",
         overflow: "hidden",
-    },
+        fontFamily: "system-ui, sans-serif",
+    }
 };
 
 export default function Popup() {
     const [tabs, setTabs] = useState([]);
-    const [hoveredTab, setHoveredTab] = useState(null);
 
     useEffect(() => {
         chrome.runtime.sendMessage({ action: "get_tabs" }, (tabs) => {
@@ -33,8 +36,7 @@ export default function Popup() {
 
     return (
         <div style={styles.popupStyle}>
-            <TabList tabs={tabs} setHoveredTab={setHoveredTab} />
-            <Preview tab={hoveredTab} />
+            <TabList tabs={tabs} />
         </div>
     );
 }
