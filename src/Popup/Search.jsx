@@ -40,6 +40,7 @@ export default function Search({ query, setQuery, selectedIndex, setSelectedInde
                 chrome.runtime.sendMessage({ action: "close_popup_background" });
                 return;
             }
+
             const ignoredKeys = ["ArrowUp", "ArrowDown", "Enter", "Backspace", "Control"];
 
             if (!ignoredKeys.includes(e.key) && inputRef.current) {
@@ -59,7 +60,7 @@ export default function Search({ query, setQuery, selectedIndex, setSelectedInde
                 return;
             }
 
-            if (filteredTabs.length === 0) {
+            if (filteredTabs.length === 1) {
                 setSelectedIndex(0);
                 return;
             }
@@ -72,15 +73,23 @@ export default function Search({ query, setQuery, selectedIndex, setSelectedInde
                 e.preventDefault();
             } else if (e.key === "Enter") {
                 const selectedTab = filteredTabs[selectedIndex];
+
                 if (selectedTab) {
                     chrome.runtime.sendMessage({ action: "close_popup_background" });
-                    chrome.runtime.sendMessage({ action: "activate_tab", tabId: selectedTab.id });
+                    if (selectedTab.isSearch) {
+                        window.open(selectedTab.url, "_blank");
+                    } else {
+                        chrome.runtime.sendMessage({
+                            action: "activate_tab",
+                            tabId: selectedTab.id
+                        });
+                    }
                 }
             }
         };
 
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
+        window.addEventListener("keydown", handleKeyDown, { capture: true });
+        return () => window.removeEventListener("keydown", handleKeyDown, { capture: true });
     }, [filteredTabs, selectedIndex, query, setQuery]);
 
     return (

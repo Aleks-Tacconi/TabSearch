@@ -11,17 +11,29 @@ export default function TabList({ tabs }) {
     const [query, setQuery] = useState("");
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const filteredTabs = tabs
-        .filter((tab) => !tab.active)
-        .filter((tab) =>
-            tab.title?.toLowerCase().includes(query.toLowerCase()) ||
-            tab.url?.toLowerCase().includes(query.toLowerCase())
-        );
+    const searchTab = query
+        ? [{
+            id: "searchTab",
+            title: `Search Google for "${query}"`,
+            url: `https://search.brave.com/search?q=${encodeURIComponent(query)}`,
+            isSearch: true,
+        }]
+        : [];
+
+    const filteredTabs = [
+        ...tabs
+            .filter((tab) => !tab.active)
+            .filter((tab) =>
+                tab.title?.toLowerCase().includes(query.toLowerCase()) ||
+                tab.url?.toLowerCase().includes(query.toLowerCase())
+            ),
+        ...searchTab
+    ];
     const itemRefs = useRef([]);
 
     useEffect(() => {
         const ref = itemRefs.current[selectedIndex];
-        ref?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        ref?.scrollIntoView({ block: "nearest", behavior: "auto" });
     }, [selectedIndex, filteredTabs]);
 
     return (

@@ -60,6 +60,8 @@ const styles = {
 const Tab = forwardRef(({ tab, selected }, ref) => {
     if (tab.active) return null;
 
+    const isSearch = tab.isSearch;
+
     return (
         <li
             ref={ref}
@@ -99,9 +101,7 @@ const Tab = forwardRef(({ tab, selected }, ref) => {
                     opacity: selected ? 1 : 0,
                 }}
             >
-                <div>
-                    Go&nbsp;to&nbsp;tab
-                </div>
+                <div>{isSearch ? "Search" : "Go\u00A0to\u00A0tab"}</div>
                 <div style={{
                     fontWeight: "800",
                     padding: "2px 5px",
