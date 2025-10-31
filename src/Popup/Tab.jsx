@@ -8,28 +8,15 @@ const styles = {
         cursor: "pointer",
         borderRadius: "10px",
         margin: "4px 8px",
-
-        background: "rgba(255, 255, 255, 0.05)",
-        border: "1px solid rgba(255, 255, 255, 0.06)",
-        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.25)",
-        transition: "all 0.18s ease-in-out",
-
         color: "rgba(255,255,255,0.9)",
         fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    },
-
-    hover: {
-        background: "rgba(255,255,255,0.10)",
-        border: "1px solid rgba(255,255,255,0.12)",
-        boxShadow: "0 3px 6px rgba(0,0,0,0.35)",
+        border: "1px solid transparent",
     },
 
     selected: {
-        background: "rgba(255,255,255,0.18)",
-        border: "1px solid rgba(255,255,255,0.25)",
-        boxShadow: "0 4px 10px rgba(0,0,0,0.4)",
-        backdropFilter: "blur(14px) saturate(180%)",
-        transform: "scale(1.005)",
+        border: "1px solid rgba(255, 255, 255, 0.06)",
+        background: "rgba(255, 255, 255, 0.05)",
+        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.25)",
     },
 
     icon: {
@@ -109,7 +96,6 @@ const Tab = forwardRef(({ tab, selected }, ref) => {
                     color: "rgba(255, 255, 255, 0.7)",
                     userSelect: "none",
                     paddingLeft: "12px",
-                    transition: "opacity 0.18s ease-in-out",
                     opacity: selected ? 1 : 0,
                 }}
             >

@@ -40,6 +40,8 @@ const styles = {
         /* --- Layout behavior --- */
         padding: "16px",
         paddingBottom: "0px",
+        paddingLeft: "3px",
+        paddingRight: "3px",
         boxSizing: "border-box",
         userSelect: "none",
 

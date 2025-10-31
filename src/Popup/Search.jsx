@@ -6,19 +6,18 @@ const styles = {
         flexDirection: "column",
         width: "100%",
         paddingBottom: "8px",
-        borderBottom: "1px solid rgba(255,255,255,0.1)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
         marginBottom: "14px",
     },
 
     searchBar: {
-        width: "calc(100% - 6px)",
+        width: "calc(100% - 16px)",
         margin: "4px auto",
-        padding: "12px 6px",
-        paddingBottom: "4px",
+        padding: "4px 16px",
         color: "rgba(255, 255, 255, 0.95)",
 
         fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-        fontSize: "15px",
+        fontSize: "18px",
         letterSpacing: "0.01em",
 
         outline: "none",
