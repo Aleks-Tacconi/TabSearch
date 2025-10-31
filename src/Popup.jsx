@@ -7,20 +7,45 @@ const styles = {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: "80vw",
-        height: "80vh",
+        width: "70vw",
+        maxWidth: "900px",
+        height: "60vh",
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "column",
+        alignItems: "stretch",
+        justifyContent: "flex-start",
 
-        background: "rgba(255, 255, 255, 0.12)",
-        backdropFilter: "blur(20px) saturate(180%)",
-        WebkitBackdropFilter: "blur(20px) saturate(180%)",
+        /* --- Frosted glass effect --- */
+        background: "rgba(20, 20, 20, 0.65)",
+        backdropFilter: "blur(25px) saturate(180%)",
+        WebkitBackdropFilter: "blur(25px) saturate(180%)",
 
-        border: "1px solid rgba(255,255,255,0.2)",
-        borderRadius: "12px",
-        boxShadow: "0 8px 30px rgba(0,0,0,0.25)",
+        /* --- Border + glow --- */
+        border: "1px solid rgba(255, 255, 255, 0.08)",
+        borderRadius: "16px",
+        boxShadow: `
+            0 0 30px rgba(0, 0, 0, 0.4),
+            0 0 12px rgba(255, 255, 255, 0.05)
+        `,
         overflow: "hidden",
-        fontFamily: "system-ui, sans-serif",
+
+        /* --- Typography --- */
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+        fontSize: "14px",
+        color: "rgba(255, 255, 255, 0.95)",
+        letterSpacing: "0.01em",
+        lineHeight: 1.4,
+
+        /* --- Layout behavior --- */
+        padding: "16px",
+        boxSizing: "border-box",
+        userSelect: "none",
+
+        animation: "popup-glow 0.3s ease-out",
+        "@keyframes popup-glow": {
+            from: { boxShadow: "0 0 0 rgba(255,255,255,0)" },
+            to: { boxShadow: "0 0 15px rgba(255,255,255,0.08)" },
+        }
     }
 };
 

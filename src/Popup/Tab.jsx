@@ -4,51 +4,71 @@ const styles = {
     li: {
         display: "flex",
         alignItems: "center",
-        padding: "8px 20px",
+        padding: "10px 16px",
         cursor: "pointer",
-        borderRadius: "6px",
-        marginBottom: "4px",
-        transition: "background 0.2s, box-shadow 0.2s",
-        boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
+        borderRadius: "10px",
         margin: "4px 8px",
+
+        background: "rgba(255, 255, 255, 0.05)",
+        border: "1px solid rgba(255, 255, 255, 0.06)",
+        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.25)",
+        transition: "all 0.18s ease-in-out",
+
+        color: "rgba(255,255,255,0.9)",
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
     },
+
+    hover: {
+        background: "rgba(255,255,255,0.10)",
+        border: "1px solid rgba(255,255,255,0.12)",
+        boxShadow: "0 3px 6px rgba(0,0,0,0.35)",
+    },
+
     selected: {
         background: "rgba(255,255,255,0.18)",
-        backdropFilter: "blur(10px)",
         border: "1px solid rgba(255,255,255,0.25)",
-        boxShadow: "0 3px 8px rgba(0,0,0,0.3)",
+        boxShadow: "0 4px 10px rgba(0,0,0,0.4)",
+        backdropFilter: "blur(14px) saturate(180%)",
+        transform: "scale(1.02)",
     },
+
     icon: {
-        backgroundColor: "transparent",
-        width: "32px",
-        height: "32px",
+        width: "28px",
+        height: "28px",
         marginRight: "12px",
+        borderRadius: "6px",
         flexShrink: 0,
-        borderRadius: "8px",
         objectFit: "contain",
+        background: "rgba(255,255,255,0.08)",
+        padding: "4px",
     },
+
     textContainer: {
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
+        gap: "2px",
     },
+
     title: {
-        fontWeight: 600,
-        color: "#1a1a1a",
+        fontWeight: 500,
+        color: "rgba(255,255,255,0.95)",
         fontSize: "0.95rem",
         textOverflow: "ellipsis",
         whiteSpace: "nowrap",
         overflow: "hidden",
+        lineHeight: 1.3,
     },
+
     url: {
-        fontSize: "0.82rem",
-        color: "#2a7ae2",
+        fontSize: "0.8rem",
+        color: "rgba(255,255,255,0.55)",
         textOverflow: "ellipsis",
         whiteSpace: "nowrap",
         overflow: "hidden",
+        lineHeight: 1.2,
     },
 };
-
 
 const Tab = forwardRef(({ tab, selected }, ref) => {
     if (tab.active) return null;
@@ -56,7 +76,15 @@ const Tab = forwardRef(({ tab, selected }, ref) => {
     return (
         <li
             ref={ref}
-            style={{ ...styles.li, ...(selected ? styles.selected : {}) }}
+            style={{
+                ...styles.li,
+                ...(selected ? styles.selected : {}),
+            }}
+            onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.hover)}
+            onMouseLeave={(e) => {
+                Object.assign(e.currentTarget.style, styles.li);
+                if (selected) Object.assign(e.currentTarget.style, styles.selected);
+            }}
         >
             <img
                 src={tab.favIconUrl || chrome.runtime.getURL("search.png")}

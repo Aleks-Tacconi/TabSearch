@@ -8,8 +8,9 @@ let visible = false;
 
 function togglePopup() {
     if (!container) {
-        container = document.createElement("iframe");
-        container.id = "react-popup-iframe";
+        // Create host element
+        container = document.createElement("div");
+        container.id = "react-popup";
         Object.assign(container.style, {
             all: "initial",
             position: "fixed",
@@ -19,52 +20,53 @@ function togglePopup() {
             zIndex: 999999,
             width: "80vw",
             height: "80vh",
-            border: "none",
         });
-        container.style.setProperty("background", "transparent", "important");
         document.body.appendChild(container);
 
-        const doc = container.contentDocument;
-        doc.open();
+        // Shadow DOM
+        const shadow = container.attachShadow({ mode: "open" });
 
-        doc.write(`
-        <!DOCTYPE html>
-        <html>
-        <head></head>
-        <body>
-          <div id="tab-search-root"></div>
-        </body>
-        </html>
-        `);
+        // Root element for React inside shadow
+        const reactRoot = document.createElement("div");
+        shadow.appendChild(reactRoot);
 
-        doc.close();
-
-        // Add CSS to hide scrollbar
-        const style = doc.createElement("style");
+        // Optional: Add styles scoped to shadow
+        const style = document.createElement("style");
         style.textContent = `
-        html, body, #tab-search-root {
-          all: initial;
-          display: block;
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0, 0, 0, 0) !important;
-          color: rgba(0, 0, 0, 0) !important;
-          overflow: hidden;
+        :host, :host * {
+            all: unset;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+            font-size: 14px !important;
         }
 
-        *, *::before, *::after {
-          all: unset;
-          box-sizing: border-box;
+        :host {
+            display: block;
+            position: relative;
+            background: rgba(40, 40, 40, 0.8);
+            backdrop-filter: blur(16px);
+            border-radius: 12px;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            color: transparent !important;
+        }
+
+        /* Prevent browser form and link styling */
+        :host a, :host button, :host input, :host textarea, :host select {
+            all: unset;
+            box-sizing: border-box;
+            font: inherit;
+            color: inherit;
+            background: none;
+            border: none;
         }
 
         ::-webkit-scrollbar { display: none; }
         `;
-        doc.head.appendChild(style);
-
-        root = ReactDOM.createRoot(doc.getElementById("tab-search-root"));
+        shadow.appendChild(style);
+        root = ReactDOM.createRoot(reactRoot);
     }
 
     if (visible) {
@@ -76,16 +78,17 @@ function togglePopup() {
 }
 
 function closePopup() {
+    if (!root) return;
     root.unmount();
     container.remove();
     container = null;
+    root = null;
     visible = false;
 }
 
 chrome.runtime.onMessage.addListener((msg) => {
     if (msg.action === "toggle_popup") togglePopup();
 });
-
 chrome.runtime.onMessage.addListener((msg) => {
     if (msg.action === "close_popup") closePopup();
 });
