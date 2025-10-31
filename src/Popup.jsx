@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import TabList from "./Popup/TabList.jsx";
+import BottomPannel from "./Popup/BottomPannel.jsx";
 
 const styles = {
     popupStyle: {
@@ -16,9 +17,9 @@ const styles = {
         justifyContent: "flex-start",
 
         /* --- Frosted glass effect --- */
-        background: "rgba(20, 20, 20, 0.92)",
-        backdropFilter: "blur(12px) saturate(120%)",
-        WebkitBackdropFilter: "blur(12px) saturate(120%)",
+        background: "rgba(20, 20, 20, 0.95)",
+        backdropFilter: "blur(12px) saturate(100%)",
+        WebkitBackdropFilter: "blur(12px) saturate(100%)",
 
         /* --- Border + glow --- */
         border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -38,6 +39,7 @@ const styles = {
 
         /* --- Layout behavior --- */
         padding: "16px",
+        paddingBottom: "0px",
         boxSizing: "border-box",
         userSelect: "none",
 
@@ -58,11 +60,10 @@ export default function Popup() {
         });
     }, []);
 
-
     return (
         <div style={styles.popupStyle}>
             <TabList tabs={tabs} />
+            <BottomPannel />
         </div>
     );
 }
-

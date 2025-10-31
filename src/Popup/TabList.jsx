@@ -3,7 +3,7 @@ import Tab from "./Tab";
 import Search from "./Search";
 
 const styles = {
-    container: { display: "flex", flexDirection: "column", flex: 1, height: "100%" },
+    container: { display: "flex", flexDirection: "column", flex: 1, height: "90%" },
     list: { listStyle: "none", padding: 0, margin: 0, overflowY: "auto", flex: 1 },
 };
 
