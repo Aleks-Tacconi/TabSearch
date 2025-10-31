@@ -29,7 +29,7 @@ const styles = {
         border: "1px solid rgba(255,255,255,0.25)",
         boxShadow: "0 4px 10px rgba(0,0,0,0.4)",
         backdropFilter: "blur(14px) saturate(180%)",
-        transform: "scale(1.02)",
+        transform: "scale(1.005)",
     },
 
     icon: {
@@ -79,6 +79,7 @@ const Tab = forwardRef(({ tab, selected }, ref) => {
             style={{
                 ...styles.li,
                 ...(selected ? styles.selected : {}),
+                position: "relative",
             }}
             onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.hover)}
             onMouseLeave={(e) => {
@@ -100,6 +101,32 @@ const Tab = forwardRef(({ tab, selected }, ref) => {
                 <span style={styles.title}>{tab.title || "No title"}</span>
                 <span style={styles.url}>{tab.url}</span>
             </div>
+
+            <span
+                style={{
+                    marginLeft: "auto",
+                    fontSize: "4rem",
+                    color: "rgba(255, 255, 255, 0.7)",
+                    userSelect: "none",
+                    paddingLeft: "12px",
+                    transition: "opacity 0.18s ease-in-out",
+                    opacity: selected ? 1 : 0,
+                }}
+            >
+                <div>
+                    Go&nbsp;to&nbsp;tab
+                </div>
+                <div style={{
+                    fontWeight: "800",
+                    padding: "2px 5px",
+                    borderRadius: "3px",
+                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.25)",
+                    marginLeft: "8px",
+                }}>
+                    ⤶
+                </div>
+            </span>
         </li>
     );
 });
