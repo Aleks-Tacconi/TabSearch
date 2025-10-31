@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const styles = {
     container: {
@@ -24,19 +24,64 @@ const styles = {
 
         caretColor: "rgba(255, 255, 255, 0.8)",
     },
-
-    searchBarFocus: {
-        // you can add extra glow/border on focus if desired
-    },
 };
 
 export default function Search({ query, setQuery, selectedIndex, setSelectedIndex, filteredTabs }) {
     const inputRef = useRef();
-    const [focused, setFocused] = useState(false);
 
     useEffect(() => {
         inputRef.current?.focus();
     }, []);
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") {
+                e.preventDefault();
+                chrome.runtime.sendMessage({ action: "close_popup_background" });
+                return;
+            }
+            const ignoredKeys = ["ArrowUp", "ArrowDown", "Enter", "Backspace", "Control"];
+
+            if (!ignoredKeys.includes(e.key) && inputRef.current) {
+                e.preventDefault();
+                inputRef.current.focus();
+
+                if (e.key.length === 1) {
+                    const start = inputRef.current.selectionStart;
+                    const end = inputRef.current.selectionEnd;
+                    const newValue =
+                        query.slice(0, start) + e.key + query.slice(end);
+                    setQuery(newValue);
+                    setTimeout(() => {
+                        inputRef.current.setSelectionRange(start + 1, start + 1);
+                    }, 0);
+                }
+                return;
+            }
+
+            if (filteredTabs.length === 0) {
+                setSelectedIndex(0);
+                return;
+            }
+
+            if (e.key === "ArrowDown") {
+                setSelectedIndex((i) => Math.min(i + 1, filteredTabs.length - 1));
+                e.preventDefault();
+            } else if (e.key === "ArrowUp") {
+                setSelectedIndex((i) => Math.max(i - 1, 0));
+                e.preventDefault();
+            } else if (e.key === "Enter") {
+                const selectedTab = filteredTabs[selectedIndex];
+                if (selectedTab) {
+                    chrome.runtime.sendMessage({ action: "close_popup_background" });
+                    chrome.runtime.sendMessage({ action: "activate_tab", tabId: selectedTab.id });
+                }
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [filteredTabs, selectedIndex, query, setQuery]);
 
     return (
         <div style={styles.container}>
@@ -49,39 +94,11 @@ export default function Search({ query, setQuery, selectedIndex, setSelectedInde
                     setQuery(e.target.value);
                     setSelectedIndex(0);
                 }}
-                onFocus={() => setFocused(true)}
-                onBlur={() => setFocused(false)}
-                onKeyDown={(e) => {
-                    if (e.key === "Escape") {
-                        chrome.runtime.sendMessage({ action: "close_popup_background" });
-                        return;
-                    }
-
-                    if (filteredTabs.length === 0) {
-                        setSelectedIndex(0);
-                        return;
-                    }
-
-                    if (e.key === "ArrowDown") {
-                        setSelectedIndex((i) => Math.min(i + 1, filteredTabs.length - 1));
-                        e.preventDefault();
-                    } else if (e.key === "ArrowUp") {
-                        setSelectedIndex((i) => Math.max(i - 1, 0));
-                        e.preventDefault();
-                    } else if (e.key === "Enter") {
-                        const selectedTab = filteredTabs[selectedIndex];
-                        if (selectedTab) {
-                            chrome.runtime.sendMessage({ action: "close_popup_background" });
-                            chrome.runtime.sendMessage({ action: "activate_tab", tabId: selectedTab.id });
-                        }
-                    }
+                onBlur={() => {
+                    chrome.runtime.sendMessage({ action: "close_popup_background" });
                 }}
-                style={{
-                    ...styles.searchBar,
-                    ...(focused ? styles.searchBarFocus : {}),
-                }}
+                style={styles.searchBar}
             />
         </div>
     );
 }
-

@@ -14,7 +14,8 @@ export default function TabList({ tabs }) {
     const filteredTabs = tabs
         .filter((tab) => !tab.active)
         .filter((tab) =>
-            tab.title?.toLowerCase().includes(query.toLowerCase())
+            tab.title?.toLowerCase().includes(query.toLowerCase()) ||
+            tab.url?.toLowerCase().includes(query.toLowerCase())
         );
     const itemRefs = useRef([]);
 
