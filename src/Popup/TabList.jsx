@@ -7,7 +7,10 @@ const searchTabs = (tabs, query) => {
     const options = {
         keys: ['title', 'url'],
         includeScore: true,
-        threshold: 0.3,
+        threshold: 0.5,
+        minMatchCharLength: 1,
+        shouldSort: true,
+        includeMatches: true,
     };
 
     const fuse = new Fuse(tabs, options);
