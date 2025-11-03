@@ -60,9 +60,27 @@ export default function Search({ query, setQuery, selectedIndex, setSelectedInde
                 return;
             }
 
+            if (e.key === "Enter") {
+                const selectedTab = filteredTabs[selectedIndex];
+
+                if (selectedTab) {
+                    chrome.runtime.sendMessage({ action: "close_popup_background" });
+                    if (selectedTab.isSearch) {
+                        chrome.runtime.sendMessage({ action: "search_query", query: query });
+                    } else {
+                        chrome.runtime.sendMessage({
+                            action: "activate_tab",
+                            tabId: selectedTab.id
+                        });
+                    }
+
+
+                }
+            }
+
             if (filteredTabs.length === 1) {
                 setSelectedIndex(0);
-                return;
+                return
             }
 
             if (e.key === "ArrowDown") {
@@ -71,20 +89,6 @@ export default function Search({ query, setQuery, selectedIndex, setSelectedInde
             } else if (e.key === "ArrowUp") {
                 setSelectedIndex((i) => Math.max(i - 1, 0));
                 e.preventDefault();
-            } else if (e.key === "Enter") {
-                const selectedTab = filteredTabs[selectedIndex];
-
-                if (selectedTab) {
-                    chrome.runtime.sendMessage({ action: "close_popup_background" });
-                    if (selectedTab.isSearch) {
-                        window.open(selectedTab.url, "_blank");
-                    } else {
-                        chrome.runtime.sendMessage({
-                            action: "activate_tab",
-                            tabId: selectedTab.id
-                        });
-                    }
-                }
             }
         };
 
@@ -100,8 +104,8 @@ export default function Search({ query, setQuery, selectedIndex, setSelectedInde
                 placeholder="Search tabs..."
                 value={query}
                 onChange={(e) => {
-                    setQuery(e.target.value);
-                    setSelectedIndex(0);
+                    const newQuery = e.target.value;
+                    setQuery(newQuery);
                 }}
                 onBlur={() => {
                     chrome.runtime.sendMessage({ action: "close_popup_background" });

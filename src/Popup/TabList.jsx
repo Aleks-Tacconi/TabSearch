@@ -1,6 +1,19 @@
 import { useState, useEffect, useRef } from "react";
 import Tab from "./Tab";
 import Search from "./Search";
+import Fuse from "fuse.js"
+
+const searchTabs = (tabs, query) => {
+    const options = {
+        keys: ['title', 'url'],
+        includeScore: true,
+        threshold: 0.3,
+    };
+
+    const fuse = new Fuse(tabs, options);
+    const results = fuse.search(query);
+    return results.map(result => result.item);
+};
 
 const styles = {
     container: { display: "flex", flexDirection: "column", flex: 1, height: "90%" },
@@ -15,18 +28,13 @@ export default function TabList({ tabs }) {
         ? [{
             id: "searchTab",
             title: `Search Google for "${query}"`,
-            url: `https://search.brave.com/search?q=${encodeURIComponent(query)}`,
+            url: `https://search.google.com/search?q=${encodeURIComponent(query)}`,
             isSearch: true,
         }]
         : [];
 
     const filteredTabs = [
-        ...tabs
-            .filter((tab) => !tab.active)
-            .filter((tab) =>
-                tab.title?.toLowerCase().includes(query.toLowerCase()) ||
-                tab.url?.toLowerCase().includes(query.toLowerCase())
-            ),
+        ...(query ? searchTabs(tabs, query) : tabs.filter(tab => !tab.active)),
         ...searchTab
     ];
     const itemRefs = useRef([]);

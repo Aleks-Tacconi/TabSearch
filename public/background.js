@@ -28,3 +28,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         chrome.tabs.update(msg.tabId, { active: true });
     }
 });
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    if (msg.action === "search_query" && msg.query) {
+        const searchUrl = `https://search.google.com/search?q=${encodeURIComponent(msg.query)}`;
+        chrome.tabs.create({ url: searchUrl });
+        sendResponse({ status: "ok" });
+    }
+});
