@@ -92,7 +92,7 @@ export default function Search({ query, setQuery, selectedIndex, setSelectedInde
 
     window.addEventListener("keydown", handleKeyDown, { capture: true });
     return () => window.removeEventListener("keydown", handleKeyDown, { capture: true });
-  }, [filteredTabs, selectedIndex, query, setQuery, selectedIndex]);
+  }, [filteredTabs, selectedIndex, query, setQuery, setSelectedIndex]);
 
   return (
     <div style={styles.container}>
