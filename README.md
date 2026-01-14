@@ -1,6 +1,7 @@
 # Tab Search
 
 Improve productivity and reduce search fatigue with a simple fuzzy finder for your tabs.
+(the current key bind to toggle the pop-up is `CTRL+SHIFT+K`)
 
 ![./assets/screenshot.png](./assets/screenshot.png)
 
