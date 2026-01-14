@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Tab from "./Tab";
 import Search from "./Search";
 import Fuse from "fuse.js";
+import styles from "./TabListStyles";
 
 const searchTabs = (tabs, query) => {
   const options = {
@@ -16,11 +17,6 @@ const searchTabs = (tabs, query) => {
   const fuse = new Fuse(tabs, options);
   const results = fuse.search(query);
   return results.map((result) => result.item);
-};
-
-const styles = {
-  container: { display: "flex", flexDirection: "column", flex: 1, height: "90%" },
-  list: { listStyle: "none", padding: 0, margin: 0, overflowY: "auto", flex: 1 },
 };
 
 export default function TabList({ tabs }) {

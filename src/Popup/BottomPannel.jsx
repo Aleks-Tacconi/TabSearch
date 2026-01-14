@@ -1,41 +1,4 @@
-const styles = {
-  bottomPannel: {
-    position: "sticky",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    borderTop: "1px solid rgba(255, 255, 255, 0.06)",
-    background: "rgba(255, 255, 255, 0.05)",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.25)",
-    padding: "8px 0px",
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    fontSize: "12px",
-    color: "rgba(255, 255, 255, 0.7)",
-    zIndex: 9999999999,
-    marginTop: "8px",
-    marginLeft: "-3px",
-    marginRight: "-3px",
-  },
-  keybind: {
-    display: "flex",
-    gap: "12px",
-    alignItems: "center",
-    marginRight: "12px",
-    marginLeft: "8px",
-    marginBottom: "3px",
-  },
-  key: {
-    background: "rgba(255, 255, 255, 0.08)",
-    padding: "2px 6px",
-    borderRadius: "4px",
-    fontFamily: "'Inter', sans-serif",
-    fontSize: "12px",
-    marginLeft: "-3px",
-    marginRight: "5px",
-  },
-};
+import styles from "./BottomPannelStyles";
 
 export default function BottomPannel() {
   return (
