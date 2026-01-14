@@ -1,38 +1,38 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Popup from "./Popup.jsx";
+import Popup from "./Popup";
 
 let container;
 let root;
 let visible = false;
 
 function togglePopup() {
-    if (!container) {
-        // Create host element
-        container = document.createElement("div");
-        container.id = "react-popup";
-        Object.assign(container.style, {
-            all: "initial",
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            zIndex: 999999,
-            width: "80vw",
-            height: "80vh",
-        });
-        document.body.appendChild(container);
+  if (!container) {
+    // Create host element
+    container = document.createElement("div");
+    container.id = "react-popup";
+    Object.assign(container.style, {
+      all: "initial",
+      position: "fixed",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      zIndex: 999999,
+      width: "80vw",
+      height: "80vh",
+    });
+    document.body.appendChild(container);
 
-        // Shadow DOM
-        const shadow = container.attachShadow({ mode: "open" });
+    // Shadow DOM
+    const shadow = container.attachShadow({ mode: "open" });
 
-        // Root element for React inside shadow
-        const reactRoot = document.createElement("div");
-        shadow.appendChild(reactRoot);
+    // Root element for React inside shadow
+    const reactRoot = document.createElement("div");
+    shadow.appendChild(reactRoot);
 
-        // Optional: Add styles scoped to shadow
-        const style = document.createElement("style");
-        style.textContent = `
+    // Optional: Add styles scoped to shadow
+    const style = document.createElement("style");
+    style.textContent = `
         :host, :host * {
             all: unset;
             box-sizing: border-box;
@@ -65,30 +65,30 @@ function togglePopup() {
 
         ::-webkit-scrollbar { display: none; }
         `;
-        shadow.appendChild(style);
-        root = ReactDOM.createRoot(reactRoot);
-    }
+    shadow.appendChild(style);
+    root = ReactDOM.createRoot(reactRoot);
+  }
 
-    if (visible) {
-        closePopup();
-    } else {
-        root.render(React.createElement(Popup));
-        visible = true;
-    }
+  if (visible) {
+    closePopup();
+  } else {
+    root.render(React.createElement(Popup));
+    visible = true;
+  }
 }
 
 function closePopup() {
-    if (!root) return;
-    root.unmount();
-    container.remove();
-    container = null;
-    root = null;
-    visible = false;
+  if (!root) return;
+  root.unmount();
+  container.remove();
+  container = null;
+  root = null;
+  visible = false;
 }
 
 chrome.runtime.onMessage.addListener((msg) => {
-    if (msg.action === "toggle_popup") togglePopup();
+  if (msg.action === "toggle_popup") togglePopup();
 });
 chrome.runtime.onMessage.addListener((msg) => {
-    if (msg.action === "close_popup") closePopup();
+  if (msg.action === "close_popup") closePopup();
 });
