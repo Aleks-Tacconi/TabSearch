@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Tab from "./Tab";
 import Search from "./Search";
 import Fuse from "fuse.js";
@@ -23,21 +23,26 @@ export default function TabList({ tabs }) {
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const searchTab = query
-    ? [
-        {
-          id: "searchTab",
-          title: `Search Google for "${query}"`,
-          url: `https://search.google.com/search?q=${encodeURIComponent(query)}`,
-          isSearch: true,
-        },
-      ]
-    : [];
+  const searchTab = useMemo(
+    () =>
+      query
+        ? [
+            {
+              id: "searchTab",
+              title: `Search Google for "${query}"`,
+              url: `https://search.google.com/search?q=${encodeURIComponent(query)}`,
+              isSearch: true,
+            },
+          ]
+        : [],
+    [query],
+  );
 
-  const filteredTabs = [
-    ...(query ? searchTabs(tabs, query) : tabs.filter((tab) => !tab.active)),
-    ...searchTab,
-  ];
+  const filteredTabs = useMemo(() => {
+    const base = query ? searchTabs(tabs, query) : tabs.filter((tab) => !tab.active);
+    return [...base, ...searchTab];
+  }, [tabs, query, searchTab]);
+
   const itemRefs = useRef([]);
 
   useEffect(() => {
