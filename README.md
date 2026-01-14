@@ -39,3 +39,4 @@ Improve productivity and reduce search fatigue with a simple fuzzy finder for yo
 ## TODO
 
 - Support for setting custom keybindings 
+- More actions for tab manipulation
