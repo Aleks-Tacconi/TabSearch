@@ -30,7 +30,7 @@
     ],
     "commands": {
         "show_popup": {
-            "suggested_key": { "default": "Ctrl+Shift+Y" },
+            "suggested_key": { "default": "Ctrl+Shift+K" },
             "description": "Show popup on page"
         }
     }
