@@ -33,6 +33,7 @@ Improve productivity and reduce search fatigue with a simple fuzzy finder for yo
 5. Go to extensions page on desired chromium based browser, enable developer mode, select "Load unpacked" and select TabSearch/dist as the directory. The extension will now be installed
 
 > Note: Already open pages will have to be reloaded in order for the popup to work on them.
+
 > Note: This extensions also does not work on internal pages (chrome://... or brave://...)
 
 ## TODO
